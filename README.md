@@ -599,5 +599,4 @@ DeviceFileEvents
 **Answer: SupportChat_log.lnk**
 
 ## CONCLUSION
-After completing the hunt, I realized it wasn't that hard once I started thinking like a true detective. I had to keep track of my notes, the commands, and files that I've seen along the way, and refer back to them later. The most important thing was keeping track of the time of the events, because they do follow each other and leave a trail behind.
-
+Upon completing the hunt, I recognized that the complexity diminished once I adopted a true investigative mindset. Systematically documenting my observations—notes, command executions, and file interactions provided a structured reference framework that I could revisit as patterns began to emerge. The most critical element, however, was maintaining precise awareness of event timestamps. The chronological sequence formed a coherent trail of activity, and understanding that progression was essential to reconstructing the actor’s behavior with accuracy and confidence.
