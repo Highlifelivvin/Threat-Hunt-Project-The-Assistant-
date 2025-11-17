@@ -40,7 +40,7 @@ Before you officially begin the flags, you must first determine where to start h
 3. Common keywords among the discovered files included “desk,” “help,” “support,” and “tool.”
 4. Intern operated machines seem to be affected to certain degree.
 
-🕵️ **Identify the most suspicious machine based on the given conditions**
+ **Identify the most suspicious machine based on the given conditions**
 
 Query used:
 ```
@@ -49,7 +49,7 @@ DeviceProcessEvents
 | where DeviceName contains "intern"
 | summarize count() by DeviceName
 ```
-🧠 **Thought process:** The task says there are processes spawned with certain file names, so I looked into ProcessCommandLine and InitiatingProcessCommandLine to contain any of the above-mentioned words. I also looked for an "intern" account, and there was only one that really stood out
+ **Thought process:** The task says there are processes spawned with certain file names, so I looked into ProcessCommandLine and InitiatingProcessCommandLine to contain any of the above-mentioned words. I also looked for an "intern" account, and there was only one that really stood out
 
 <img width="600" src="https://github.com/user-attachments/assets/1e7b2c62-12b6-4e70-86ae-71446699bcc8"/>
 
@@ -70,7 +70,7 @@ and I indeed found the "SupportTool.ps1" file that has some of the words I was l
 
 ---
 
-## 🟩 Flag 1 – Initial Execution Detection
+##  Flag 1 – Initial Execution Detection
 
 **Objective:**
 
@@ -89,7 +89,7 @@ Identifying the first abnormal execution anchors the timeline and allows you to 
 1. Downloads
 2. Two
 
- 🕵️ **What was the first CLI parameter name used during the execution of the suspicious program?**
+  **What was the first CLI parameter name used during the execution of the suspicious program?**
 
 Query used:
 ```
@@ -99,7 +99,7 @@ DeviceProcessEvents
 | where InitiatingProcessAccountName == "g4bri3lintern"
 | project TimeGenerated, FileName, FolderPath, ProcessCommandLine, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentFileName, InitiatingProcessParentId
 ```
-🧠 **Thought process:** This one was a little tricky as I wasn't sure what the question was asking and what the answer should be, but I looked at every command that deviates from the normal use and eventually figured out that the answer was only the -ExecutionPolicy parameter, not including the rest or part of the command.
+ **Thought process:** This one was a little tricky as I wasn't sure what the question was asking and what the answer should be, but I looked at every command that deviates from the normal use and eventually figured out that the answer was only the -ExecutionPolicy parameter, not including the rest or part of the command.
 
 <img width="800" src="https://github.com/user-attachments/assets/a270c74e-173c-418b-b63a-df12753f58b3" />
 
@@ -107,7 +107,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 2 – Defense Disabling
+##  Flag 2 – Defense Disabling
 
 **Objective:**
 
@@ -125,7 +125,7 @@ A planted or staged tamper indicator is a signal of intent — treat it as inten
 
 1. File was manually accessed
 
- 🕵️ **What was the name of the file related to this exploit?**
+  **What was the name of the file related to this exploit?**
 
 Query used:
 ```
@@ -135,7 +135,7 @@ DeviceFileEvents
 | where InitiatingProcessFileName contains "Explorer.EXE"
 |project TimeGenerated, ActionType, FileName, FolderPath, InitiatingProcessCommandLine, InitiatingProcessFileName, InitiatingProcessFolderPath
 ```
-🧠 **Thought process:** The thought behind it was that it has to do with a word such as defender or antivirus, or some kind of software tampering that has to do with defence. So I searched for these words in the query, and a big help was that I realized that the manual access was via explorer.exe, which really narrowed it down.
+ **Thought process:** The thought behind it was that it has to do with a word such as defender or antivirus, or some kind of software tampering that has to do with defence. So I searched for these words in the query, and a big help was that I realized that the manual access was via explorer.exe, which really narrowed it down.
 
 <img width="800" src="https://github.com/user-attachments/assets/c1e7ad6a-a8a8-4957-955e-cac7915b2114" />
 
@@ -143,7 +143,7 @@ DeviceFileEvents
 
 ---
 
-## 🟩 Flag 3 – Quick Data Probe
+##  Flag 3 – Quick Data Probe
 
 **Objective:**
 
@@ -165,7 +165,7 @@ Attackers look for low-effort wins first; these quick probes often precede broad
 
 1. has query
 
- 🕵️ **Provide the command value tied to this particular exploit**
+  **Provide the command value tied to this particular exploit**
 
 Query used:
 ```
@@ -175,7 +175,7 @@ DeviceProcessEvents
 | project Timestamp, DeviceName, InitiatingProcessFileName, ProcessCommandLine
 | order by Timestamp asc
 ```
-🧠 **Thought process:** AI really helped me with this one, because I wasn't sure what the hint was saying, and I got a straight answer that it could do with a clipboard, so I looked in the right direction immediately and got an easy answer.
+ **Thought process:** AI really helped me with this one, because I wasn't sure what the hint was saying, and I got a straight answer that it could do with a clipboard, so I looked in the right direction immediately and got an easy answer.
 
 <img width="2048" height="121" alt="image" src="https://github.com/user-attachments/assets/ef20a267-ecb0-42c7-8759-8de20a4e3e29" />
 
@@ -183,7 +183,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 4 – Host Context Recon
+##  Flag 4 – Host Context Recon
 
 **Objective:**
 
@@ -201,7 +201,7 @@ Context-gathering shapes attacker decisions — who, what, and where to target n
 
 1. qwi
 
- 🕵️ **Point out when the last recon attempt was**
+  **Point out when the last recon attempt was**
 
 Query used:
 ```
@@ -210,7 +210,7 @@ DeviceProcessEvents
 | where ProcessCommandLine contains "qwi"
 | project TimeGenerated, FileName, FolderPath, ProcessCommandLine, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentFileName, InitiatingProcessParentId
 ```
-🧠 **Thought process:** Before I start hunting the flags, I always check the ProcessCommandLine and look for suspicious-looking scripts, like whoami and other enumerating scripts, so I get the idea of the attack. I then saw the qwinsta command so it was easy to go looking for it with the given hint.
+ **Thought process:** Before I start hunting the flags, I always check the ProcessCommandLine and look for suspicious-looking scripts, like whoami and other enumerating scripts, so I get the idea of the attack. I then saw the qwinsta command so it was easy to go looking for it with the given hint.
 
 <img width="800" src="https://github.com/user-attachments/assets/8c7e43fa-852c-4690-85c9-3a714707c887" />
 
@@ -218,7 +218,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 5 – Storage Surface Mapping
+##  Flag 5 – Storage Surface Mapping
 
 **Objective:**
 
@@ -236,7 +236,7 @@ Mapping where data lives is a preparatory step for collection and staging.
 
 1. Storage assessment
 
- 🕵️ **Provide the 2nd command tied to this activity**
+  **Provide the 2nd command tied to this activity**
 
 Query used:
 ```
@@ -246,7 +246,7 @@ DeviceProcessEvents
 | where InitiatingProcessAccountName == "g4bri3lintern"
 | project TimeGenerated, FileName, FolderPath, ProcessCommandLine, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentFileName, InitiatingProcessParentId
 ```
-🧠 **Thought process:** Same goes for this flag, as I've already seen most of the commands initiated by the g4bri3lintern AccountName, it was quite straightforward to find the right answer.
+ **Thought process:** Same goes for this flag, as I've already seen most of the commands initiated by the g4bri3lintern AccountName, it was quite straightforward to find the right answer.
 
 <img width="800" src="https://github.com/user-attachments/assets/a7aba7d6-10b2-4d20-bc51-ef04400879cd" />
 
@@ -254,7 +254,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 6 – Connectivity & Name Resolution Check
+##  Flag 6 – Connectivity & Name Resolution Check
 
 **Objective:**
 
@@ -272,7 +272,7 @@ Confirming egress is a necessary precondition before any attempt to move data of
 
 1. session
 
- 🕵️ **Provide the File Name of the initiating parent process**
+  **Provide the File Name of the initiating parent process**
 
 Query used:
 ```
@@ -282,7 +282,7 @@ DeviceProcessEvents
 | where InitiatingProcessAccountName == "g4bri3lintern"
 | project TimeGenerated, FileName, FolderPath, ProcessCommandLine, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentFileName, InitiatingProcessParentId
 ```
-🧠 **Thought process:** I looked for all different kinds of network tests, like ping and tracert to begin with, then with the help of the internet, I added the rest of the methods and eventually found the nslookup method which gave me the answer I was looking for.
+ **Thought process:** I looked for all different kinds of network tests, like ping and tracert to begin with, then with the help of the internet, I added the rest of the methods and eventually found the nslookup method which gave me the answer I was looking for.
 
 <img width="800" src="https://github.com/user-attachments/assets/1e368742-2f6d-4104-9704-20758d092b32" />
 
@@ -290,7 +290,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 7 – Interactive Session Discovery
+##  Flag 7 – Interactive Session Discovery
 
 **Objective:**
 
@@ -305,7 +305,7 @@ Signals that enumerate current session state or logged-in sessions without initi
 Knowing which sessions are active helps an actor decide whether to act immediately or wait.
 
 
- 🕵️ **What is the unique ID of the initiating process**
+  **What is the unique ID of the initiating process**
 
 Query used:
 ```
@@ -315,7 +315,7 @@ DeviceProcessEvents
 | where InitiatingProcessAccountName == "g4bri3lintern"
 | project TimeGenerated, InitiatingProcessUniqueId, FileName, FolderPath, ProcessCommandLine, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentFileName, InitiatingProcessParentId
 ```
-🧠 **Thought process:** This was again one of those commands that I've already seen, I just had to go find the unique ID of the initiating process.
+ **Thought process:** This was again one of those commands that I've already seen, I just had to go find the unique ID of the initiating process.
 
 <img width="800" src="https://github.com/user-attachments/assets/af1393b0-ebf5-4f37-8657-3e6f57094e17" />
 
@@ -323,7 +323,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 8 – Runtime Application Inventory
+##  Flag 8 – Runtime Application Inventory
 
 **Objective:**
 
@@ -343,7 +343,7 @@ A process inventory shows what’s present and what to avoid or target for colle
 2. List
 3. Last
 
- 🕵️ **Provide the file name of the process that best demonstrates a runtime process enumeration event on the target host**
+  **Provide the file name of the process that best demonstrates a runtime process enumeration event on the target host**
 
 Query used:
 ```
@@ -353,7 +353,7 @@ DeviceProcessEvents
 | project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine
 | order by Timestamp asc
 ```
-🧠 **Thought process:** With the help of the hints, I could deduce that I was looking for a tasklist in a command line, because it was also one of the commands I've previously noted.
+ **Thought process:** With the help of the hints, I could deduce that I was looking for a tasklist in a command line, because it was also one of the commands I've previously noted.
 
 <img width="800" src="https://github.com/user-attachments/assets/8bfae80d-8b88-42fc-abde-48bdaddc1acf" />
 
@@ -361,7 +361,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 9 – Privilege Surface Check
+##  Flag 9 – Privilege Surface Check
 
 **Objective:**
 
@@ -379,7 +379,7 @@ Privilege mapping informs whether the actor proceeds as a user or seeks elevatio
 
 1. Who
 
- 🕵️ **Identify the timestamp of the very first attempt**
+  **Identify the timestamp of the very first attempt**
 
 Query used:
 ```
@@ -389,7 +389,7 @@ DeviceProcessEvents
 | where InitiatingProcessAccountName == "g4bri3lintern"
 | project TimeGenerated, FileName, FolderPath, ProcessCommandLine, InitiatingProcessCommandLine, InitiatingProcessId, InitiatingProcessParentFileName, InitiatingProcessParentId
 ```
-🧠 **Thought process:** This was yet again part of the commands previously seen, so I immediately jumped to it.
+ **Thought process:** This was yet again part of the commands previously seen, so I immediately jumped to it.
 
 <img width="800" src="https://github.com/user-attachments/assets/91eb61d0-ccfe-40c9-bbaf-c6c57812eff6" />
 
@@ -397,7 +397,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 10 – Proof-of-Access & Egress Validation
+##  Flag 10 – Proof-of-Access & Egress Validation
 
 **Objective:**
 
@@ -415,7 +415,7 @@ This step demonstrates both access and the potential to move meaningful data off
 
 1. support
 
- 🕵️ **Which outbound destination was contacted first?**
+  **Which outbound destination was contacted first?**
 
 Query used:
 ```
@@ -424,7 +424,7 @@ DeviceNetworkEvents
 | where AdditionalFields != ""
 |project TimeGenerated, AdditionalFields, RemoteIP, RemoteUrl
 ```
-🧠 **Thought process:**  This flag was a bit more difficult than the rest, but I eventually started thinking rationally. First, I set the time from 9th of October 12 pm, which was just after the previous steps, and I filtered the AdditionalFields to not show if it's empty. Then it was pretty easy to see which host was contacted, but the obvious name of the host felt like it was a trap, so I evaded it for a little while until I finally gave it a shot
+ **Thought process:**  This flag was a bit more difficult than the rest, but I eventually started thinking rationally. First, I set the time from 9th of October 12 pm, which was just after the previous steps, and I filtered the AdditionalFields to not show if it's empty. Then it was pretty easy to see which host was contacted, but the obvious name of the host felt like it was a trap, so I evaded it for a little while until I finally gave it a shot
 
 <img width="800" src="https://github.com/user-attachments/assets/eb2910a0-afa5-4b92-a20c-4efe91ad1a3e" />
 
@@ -432,7 +432,7 @@ DeviceNetworkEvents
 
 ---
 
-## 🟩 Flag 11 – Bundling / Staging Artifacts
+##  Flag 11 – Bundling / Staging Artifacts
 
 **Objective:**
 
@@ -451,7 +451,7 @@ Staging is the practical step that simplifies exfiltration and should be correla
 1. Include the file value
 
 
- 🕵️ **Provide the full folder path value where the artifact was first dropped into**
+  **Provide the full folder path value where the artifact was first dropped into**
 
 Query used:
 ```
@@ -461,7 +461,7 @@ DeviceFileEvents
 | where InitiatingProcessAccountName == "g4bri3lintern"
 | project TimeGenerated, ActionType, AdditionalFields, FileName, FileSize, FolderPath
 ```
-🧠 **Thought process:** After seeing the words bundling, grouping, and packaging, I knew I was looking for a .zip type of file.
+ **Thought process:** After seeing the words bundling, grouping, and packaging, I knew I was looking for a .zip type of file.
 
 <img width="800" src="https://github.com/user-attachments/assets/d0ca1ca0-5080-4883-b069-9e956b814731" />
 
@@ -469,7 +469,7 @@ DeviceFileEvents
 
 ---
 
-## 🟩 Flag 12 – Outbound Transfer Attempt (Simulated)
+##  Flag 12 – Outbound Transfer Attempt (Simulated)
 
 **Objective:**
 
@@ -487,7 +487,7 @@ Succeeded or not, attempt is still proof of intent — and it reveals egress pat
 
 1. chat
 
- 🕵️ **Provide the IP of the last unusual outbound connection**
+  **Provide the IP of the last unusual outbound connection**
 
 Query used:
 ```
@@ -497,7 +497,7 @@ DeviceNetworkEvents
 //| where RemoteIP == "100.29.147.161"
 |project TimeGenerated, AdditionalFields, RemoteIP, ActionType
 ```
-🧠 **Thought process:** I had to look at when the events happened before this step, so I filtered the TimeGenerated accordingly. I then filtered the AdditionalFields to contain Out (egress) and searched for the results that contain http, https, .com, .net, and others. I first found the answer, which was httpbin.org, but it connected to two different IPs. Unluckily for me, I tested the wrong IP first, which made me think that maybe it's not in fact httpbin.org. After exhausting all my options, I saw that httpbin.org was connecting to another IP, which was then correct.
+ **Thought process:** I had to look at when the events happened before this step, so I filtered the TimeGenerated accordingly. I then filtered the AdditionalFields to contain Out (egress) and searched for the results that contain http, https, .com, .net, and others. I first found the answer, which was httpbin.org, but it connected to two different IPs. Unluckily for me, I tested the wrong IP first, which made me think that maybe it's not in fact httpbin.org. After exhausting all my options, I saw that httpbin.org was connecting to another IP, which was then correct.
 
  <img width="800" src="https://github.com/user-attachments/assets/d2a4034a-6ba3-4581-a796-60ce28b2838c" />
 
@@ -505,7 +505,7 @@ DeviceNetworkEvents
 
 ---
 
-## 🟩 Flag 13 – Scheduled Re-Execution Persistence
+##  Flag 13 – Scheduled Re-Execution Persistence
 
 **Objective:**
 
@@ -520,7 +520,7 @@ Process or scheduler-related events that create recurring or logon-triggered exe
 Re-execution mechanisms are the actor’s way of surviving beyond a single session — interrupting them reduces risk.
 
 
- 🕵️ **Provide the value of the task name down below**
+  **Provide the value of the task name down below**
 
 Query used:
 ```
@@ -531,7 +531,7 @@ DeviceProcessEvents
 | project TimeGenerated, AccountName, FileName, FolderPath, ProcessCommandLine
 | order by TimeGenerated asc
 ```
-🧠 **Thought process:** The only problem I had was figuring out what the task name is, but after careful analysis of the command, I saw the TN, which I assumed stands for task name, and I was right. I was looking for a task schedule command to begin with, and there were not many, so it was easy to find.
+ **Thought process:** The only problem I had was figuring out what the task name is, but after careful analysis of the command, I saw the TN, which I assumed stands for task name, and I was right. I was looking for a task schedule command to begin with, and there were not many, so it was easy to find.
 
 <img width="800" src="https://github.com/user-attachments/assets/3b0202ad-6ea3-47ad-85cf-c09e69231a73" />
 
@@ -539,7 +539,7 @@ DeviceProcessEvents
 
 ---
 
-## 🟩 Flag 14 – Autorun Fallback Persistence
+##  Flag 14 – Autorun Fallback Persistence
 
 **Objective:**
 
@@ -557,7 +557,7 @@ Redundant persistence increases resilience; find the fallback to prevent easy re
 
 1. log
 
-⚠️ If table returned nothing: RemoteAssistUpdater
+ If table returned nothing: RemoteAssistUpdater
 
 In my case, the table did in fact return nothing, so I had to use the answer provided
 
@@ -565,7 +565,7 @@ In my case, the table did in fact return nothing, so I had to use the answer pro
 
  ---
 
-## 🟩 Flag 15 – Planted Narrative / Cover Artifact
+##  Flag 15 – Planted Narrative / Cover Artifact
 
 **Objective:**
 
@@ -583,7 +583,7 @@ A planted explanation is a classic misdirection. The sequence and context reveal
 
 1. The actor opened it for some reason
 
- 🕵️ **Identify the file name of the artifact left behind**
+  **Identify the file name of the artifact left behind**
 
 Query used:
 ```
@@ -592,7 +592,7 @@ DeviceFileEvents
 | where FileName !contains "PSScriptPolicyTest"
 | project TimeGenerated, ActionType, FileName, FolderPath, InitiatingProcessCommandLine, InitiatingProcessFileName
 ```
-🧠 **Thought process:** I was looking for a file, but I knew it would be impossible to find it on its own, so I had to filter for TimeGenerated again and set it from 9th of October 13:00:00 to 13:30:00. The answer was then the first file on the list, which was just after the time of the persistence step
+ **Thought process:** I was looking for a file, but I knew it would be impossible to find it on its own, so I had to filter for TimeGenerated again and set it from 9th of October 13:00:00 to 13:30:00. The answer was then the first file on the list, which was just after the time of the persistence step
 
  <img width="800" src="https://github.com/user-attachments/assets/ee9c12c7-2307-4929-bc27-cb456f6204a8" />
 
