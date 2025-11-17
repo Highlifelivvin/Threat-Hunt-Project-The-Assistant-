@@ -6,17 +6,15 @@
 
 **Date:** 17 November 2025
 
+# Official Threat-Hunt-Project " The Assistant "
+<img width="1920" height="771" alt="image" src="https://github.com/user-attachments/assets/57e9c031-d83b-413a-89d6-e8ea6b892711" />
+
+
 ## Platforms and Languages Leveraged
-
-**Platforms:**
-
-* Log Analytics Workspace
-
-**Languages/Tools:**
-
-* Kusto Query Language (KQL) for querying device events, registry modifications, and persistence artifacts
-
----
+- Windows 10 Virtual Machines (Microsoft Azure)
+- EDR Platform: Microsoft Defender for Endpoint
+- Kusto Query Language (KQL)
+- Tor Browser
 
  # 📖 **Scenario**
 
