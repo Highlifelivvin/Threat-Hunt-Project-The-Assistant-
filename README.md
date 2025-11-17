@@ -593,3 +593,11 @@ DeviceFileEvents
 | project TimeGenerated, ActionType, FileName, FolderPath, InitiatingProcessCommandLine, InitiatingProcessFileName
 ```
 🧠 **Thought process:** I was looking for a file, but I knew it would be impossible to find it on its own, so I had to filter for TimeGenerated again and set it from 9th of October 13:00:00 to 13:30:00. The answer was then the first file on the list, which was just after the time of the persistence step
+
+ <img width="800" src="https://github.com/user-attachments/assets/ee9c12c7-2307-4929-bc27-cb456f6204a8" />
+
+**Answer: SupportChat_log.lnk**
+
+## CONCLUSION
+After completing the hunt, I realized it wasn't that hard once I started thinking like a true detective. I had to keep track of my notes, the commands, and files that I've seen along the way, and refer back to them later. The most important thing was keeping track of the time of the events, because they do follow each other and leave a trail behind.
+
