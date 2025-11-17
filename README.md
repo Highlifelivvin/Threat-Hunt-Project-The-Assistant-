@@ -16,7 +16,7 @@
 - Kusto Query Language (KQL)
 
 
- # 📖 **Scenario**
+##  Scenario
 
 A routine support request should have ended with a reset and reassurance. Instead, the so-called “help” left behind a trail of anomalies that don’t add up.
 
@@ -31,7 +31,7 @@ Your mission this time is to reconstruct the timeline, connect the scattered rem
 The evidence is here. The question is whether you’ll see through the story or believe it.
 
 
-## Starting Point
+## Steps Taken
 
 Before you officially begin the flags, you must first determine where to start hunting. Identify where to start hunting with the following intel given:
 
